@@ -1,0 +1,161 @@
+import os
+import base64
+import tkinter as tk
+from tkinter import messagebox, ttk
+from collections import defaultdict
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
+# --- Predefined Candidates ---
+CANDIDATES = ["Cast your vote", "Candidate A", "Candidate B", "Candidate C"]
+
+# --- Generate RSA Keys for Election Server ---
+private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+public_key = private_key.public_key()
+
+# --- Storage ---
+encrypted_votes = []
+encrypted_keys = []
+
+# --- Crypto Functions ---
+def encrypt_aes_key(aes_key, public_key):
+    return public_key.encrypt(
+        aes_key,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+
+def decrypt_aes_key(encrypted_key, private_key):
+    return private_key.decrypt(
+        encrypted_key,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+
+def encrypt_vote(vote, aes_key):
+    iv = os.urandom(16)
+    cipher = Cipher(algorithms.AES(aes_key), modes.CBC(iv))
+    encryptor = cipher.encryptor()
+    vote_padded = vote + ' ' * (16 - len(vote) % 16)
+    encrypted_vote = encryptor.update(vote_padded.encode()) + encryptor.finalize()
+    return iv + encrypted_vote
+
+def decrypt_vote(encrypted_vote, aes_key):
+    iv = encrypted_vote[:16]
+    encrypted_data = encrypted_vote[16:]
+    cipher = Cipher(algorithms.AES(aes_key), modes.CBC(iv))
+    decryptor = cipher.decryptor()
+    decrypted_vote = decryptor.update(encrypted_data) + decryptor.finalize()
+    return decrypted_vote.decode().strip()
+
+# --- GUI ---
+class VotingApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("🗳️ Secure E-Voting System")
+        self.root.geometry("500x400")
+        self.root.configure(bg="#f7f7f7")
+
+        self.style = ttk.Style()
+        self.style.theme_use("clam")
+        self.style.configure("TCombobox", padding=6, relief="flat", background="white", font=("Helvetica", 12))
+        self.style.map("TCombobox", fieldbackground=[('readonly', 'white')])
+
+        # --- Main Frame ---
+        self.frame = tk.Frame(self.root, bg="#ffffff", padx=20, pady=20, bd=2, relief="groove")
+        self.frame.pack(expand=True, pady=30)
+
+        # --- Title ---
+        tk.Label(self.frame, text="🗳️ Cast Your Vote", font=("Helvetica", 18, "bold"), fg="#2c3e50", bg="#ffffff").pack(pady=(0, 20))
+
+        # --- Dropdown ---
+        self.candidate_var = tk.StringVar(value=CANDIDATES[0])
+        self.dropdown = ttk.Combobox(self.frame, textvariable=self.candidate_var, values=CANDIDATES, state="readonly", width=25)
+        self.dropdown.pack(pady=10)
+
+        # --- Cast Button ---
+        self.vote_button = tk.Button(self.frame, text="✅ Cast Vote", command=self.cast_vote,
+                                     font=("Helvetica", 12, "bold"), bg="#27ae60", fg="white",
+                                     activebackground="#2ecc71", relief="flat", padx=10, pady=5, width=20)
+        self.vote_button.pack(pady=10)
+
+        # --- Results Button ---
+        self.results_button = tk.Button(self.frame, text="📊 Show Results", command=self.show_results,
+                                        font=("Helvetica", 12, "bold"), bg="#2980b9", fg="white",
+                                        activebackground="#3498db", relief="flat", padx=10, pady=5, width=20)
+        self.results_button.pack(pady=10)
+
+        # --- Status ---
+        self.status = tk.Label(self.frame, text="", fg="green", bg="#ffffff", font=("Helvetica", 10))
+        self.status.pack(pady=(15, 5))
+
+    def cast_vote(self):
+        vote = self.candidate_var.get()
+
+        if vote == "Cast your vote":
+            self.status.config(text="⚠️ Please select a valid candidate.", fg="red")
+            return
+
+        aes_key = os.urandom(32)
+        encrypted_aes_key = encrypt_aes_key(aes_key, public_key)
+        encrypted_vote = encrypt_vote(vote, aes_key)
+
+        encrypted_votes.append(encrypted_vote)
+        encrypted_keys.append(encrypted_aes_key)
+
+        self.status.config(text="✅ Your vote has been securely cast!", fg="green")
+        print(f"Encrypted Vote (base64): {base64.b64encode(encrypted_vote).decode()}")
+
+        self.root.after(2000, self.reset_ui)
+
+    def reset_ui(self):
+        self.candidate_var.set("Cast your vote")
+        self.status.config(text="", fg="green")
+
+    def show_results(self):
+        if not encrypted_votes:
+            messagebox.showerror("No Votes", "❌ No votes have been cast yet.")
+            return
+
+        vote_counts = defaultdict(int)
+        all_decrypted_votes = []
+
+        for i in range(len(encrypted_votes)):
+            decrypted_key = decrypt_aes_key(encrypted_keys[i], private_key)
+            decrypted_vote = decrypt_vote(encrypted_votes[i], decrypted_key)
+            all_decrypted_votes.append(decrypted_vote)
+            vote_counts[decrypted_vote] += 1
+
+        result_text = "\n🗳️ All Votes:\n"
+        for i, vote in enumerate(all_decrypted_votes, 1):
+            result_text += f"Voter {i}: {vote}\n"
+
+        result_text += "\n📊 Results:\n"
+        for candidate in CANDIDATES[1:]:  # skip placeholder
+            result_text += f"{candidate}: {vote_counts[candidate]} votes\n"
+
+        max_votes = max(vote_counts.values(), default=0)
+        winners = [c for c in CANDIDATES[1:] if vote_counts[c] == max_votes]
+
+        if max_votes == 0:
+            result_text += "\n⚠️ No valid votes."
+        elif len(winners) == 1:
+            result_text += f"\n🏆 Winner: {winners[0]} with {max_votes} votes!"
+        else:
+            result_text += f"\n🤝 It's a tie between: {', '.join(winners)}"
+
+        result_text += f"\n\n🔢 Total Votes: {len(all_decrypted_votes)}"
+        messagebox.showinfo("Election Results", result_text)
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = VotingApp(root)
+    root.mainloop()

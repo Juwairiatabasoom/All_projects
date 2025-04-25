@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>aDOGt-Adopt the Dogs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    .gradient-background {
+      background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+    }
+    .profile-img {
+      width: 100px;
+      border-radius: 50%;
+    }
+    .dog-card {
+      display: none;
+    }
+    .dog-card.visible {
+      display: block;
+    }
+
+    #dogList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .card-img-top {
+      object-fit: cover;
+      height: 200px;
+      width: 100%;
+    }
+
+    .card-body {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Header with Breed Filter -->
+<header class="bg-light py-3 border-bottom">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h2 class="m-0">aDOGt</h2>
+    <form class="d-flex" role="search" action="#" method="get">
+      <input class="form-control me-2" type="search" placeholder="Search dogs" aria-label="Search">
+      <button class="btn btn-outline-primary" type="submit">Search</button>
+    </form>
+  </div>
+</header>
+
+<!-- Title Section with Carousel -->
+<section id="title" class="gradient-background">
+  <div class="container col-xxl-8 px-4 py-3">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div id="dogCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner rounded-4 shadow-sm">
+            <div class="carousel-item active">
+              <img src="https://w0.peakpx.com/wallpaper/527/645/HD-wallpaper-dogs-pretty-lovely-playful-dog-playful-beautiful-sweet-cute-puppies-face-animals-puppy.jpg" class="d-block w-100 img-fluid" alt="dog 1" />
+            </div>
+            <div class="carousel-item">
+              <img src="https://s.hdnux.com/photos/01/33/66/74/24080146/3/1200x0.jpg" class="d-block w-100 img-fluid" alt="dog 2" />
+            </div>
+            <div class="carousel-item">
+              <img src="https://live.staticflickr.com/4038/4567370229_4e6d24e4ce_b.jpg" class="d-block w-100 img-fluid" alt="dog 3" />
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#dogCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#dogCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Find Your Perfect Furry Friend</h1>
+        <p class="lead">Give a loving home to a rescue dog and change their life forever. Browse adorable, adoptable pups and start your journey today.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <button type="button" class="btn btn-light btn-lg px-4 me-md-2">Android Download</button>
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4">iOS Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Breed Filter Section -->
+<section class="container my-5">
+  <h3>Adoptable Dogs</h3>
+  <div class="row g-2 align-items-center">
+    <div class="col-md-4">
+      <label for="breedSelect" class="form-label mb-1">Filter by Breed</label>
+      <select id="breedSelect" class="form-select">
+        <option value="">All Breeds</option>
+        <option value="labrador">Labrador</option>
+        <option value="beagle">Beagle</option>
+        <option value="golden retriever">Golden Retriever</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row mt-4" id="dogList">
+    <!-- Existing Dogs -->
+    <div class="col-md-4 mb-4 dog-card visible" data-breed="labrador">
+      <div class="card h-100">
+        <img src="https://th.bing.com/th/id/OIP.ILir8fXTqpJN7A1Thnu91AHaE8?rs=1&pid=ImgDetMain" class="card-img-top" alt="Buddy the Labrador">
+        <div class="card-body">
+          <h5 class="card-title">Buddy</h5>
+          <p class="card-text">Labrador, 2 years old. Loves fetch and belly rubs.</p>
+          <!-- Adoption Request Form -->
+      <form class="mt-2">
+        <input type="text" class="form-control mb-2" placeholder="Your name" required />
+        <input type="email" class="form-control mb-2" placeholder="Your email" required />
+        <button type="submit" class="btn btn-success btn-sm">✅ Request Adoption</button>
+      </form>
+        </div>
+      </div>
+    </div>
+    <!-- New Dog Card -->
+<div class="col-md-4 mb-4 dog-card visible" data-breed="shiba">
+  <div class="card h-100">
+    <img src="https://placedog.net/500?id=106" class="card-img-top" alt="Kiko the Shiba Inu">
+    <div class="card-body">
+      <h5 class="card-title">Kiko</h5>
+      <p class="card-text">Shiba Inu, 2 years old. Independent and adorable!</p>
+      <!-- Adoption Request Form -->
+      <form class="mt-2">
+        <input type="text" class="form-control mb-2" placeholder="Your name" required />
+        <input type="email" class="form-control mb-2" placeholder="Your email" required />
+        <button type="submit" class="btn btn-success btn-sm">✅ Request Adoption</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+    <div class="col-md-4 mb-4 dog-card visible" data-breed="beagle">
+      <div class="card h-100">
+        <img src="https://www.haustierratgeber.de/wp-content/uploads/2016/02/7450424_xl.jpg" class="card-img-top" alt="Bella the Beagle">
+        <div class="card-body">
+          <h5 class="card-title">Bella</h5>
+          <p class="card-text">Beagle, 5 years old. Gentle and sweet-natured.</p>
+          <!-- Adoption Request Form -->
+      <form class="mt-2">
+        <input type="text" class="form-control mb-2" placeholder="Your name" required />
+        <input type="email" class="form-control mb-2" placeholder="Your email" required />
+        <button type="submit" class="btn btn-success btn-sm">✅ Request Adoption</button>
+      </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4 dog-card visible" data-breed="golden retriever">
+      <div class="card h-100">
+        <img src="https://petdogowner.com/wp-content/uploads/2021/04/AdobeStock_133322407-scaled.jpeg" class="card-img-top" alt="Rocky the Golden Retriever">
+        <div class="card-body">
+          <h5 class="card-title">Rocky</h5>
+          <p class="card-text">Golden Retriever, 8 years old. Calm and loyal companion.</p>
+          <!-- Adoption Request Form -->
+      <form class="mt-2">
+        <input type="text" class="form-control mb-2" placeholder="Your name" required />
+        <input type="email" class="form-control mb-2" placeholder="Your email" required />
+        <button type="submit" class="btn btn-success btn-sm">✅ Request Adoption</button>
+      </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Dogs for Load More -->
+    <div class="col-md-4 mb-4 dog-card" data-breed="beagle">
+      <div class="card h-100">
+        <img src="https://placedog.net/500?id=101" class="card-img-top" alt="Chico the Beagle">
+        <div class="card-body">
+          <h5 class="card-title">Chico</h5>
+          <p class="card-text">Beagle, 3 years old. Playful and curious.</p>
+          <!-- Adoption Request Form -->
+      <form class="mt-2">
+        <input type="text" class="form-control mb-2" placeholder="Your name" required />
+        <input type="email" class="form-control mb-2" placeholder="Your email" required />
+        <button type="submit" class="btn btn-success btn-sm">✅ Request Adoption</button>
+      </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4 dog-card" data-breed="labrador">
+      <div class="card h-100">
+        <img src="https://placedog.net/500?id=102" class="card-img-top" alt="Milo the Labrador">
+        <div class="card-body">
+          <h5 class="card-title">Milo</h5>
+          <p class="card-text">Labrador, 4 years old. Energetic and loyal.</p>
+          <!-- Adoption Request Form -->
+      <form class="mt-2">
+        <input type="text" class="form-control mb-2" placeholder="Your name" required />
+        <input type="email" class="form-control mb-2" placeholder="Your email" required />
+        <button type="submit" class="btn btn-success btn-sm">✅ Request Adoption</button>
+      </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-3">
+    <button id="loadMoreBtn" class="btn btn-outline-secondary">Load More</button>
+  </div>
+  <p id="noResults" class="text-danger mt-3" style="display:none;">No dogs found 😢</p>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="container mt-5">
+    <h2 class="pb-2 border-bottom">Our Features</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+      <div class="feature col">
+        <div class="feature-icon text-bg-primary bg-gradient fs-2 mb-3">✅</div>
+        <h3 class="fs-2">Pet Matching</h3>
+        <p>Helps users find the perfect dog based on their lifestyle and preferences.</p>
+      </div>
+      <div class="feature col">
+        <div class="feature-icon text-bg-primary bg-gradient fs-2 mb-3">🎓</div>
+        <h3 class="fs-2">Adoption App</h3>
+        <p>Streamlines the process with online forms and status tracking.</p>
+      </div>
+      <div class="feature col">
+        <div class="feature-icon text-bg-primary bg-gradient fs-2 mb-3">❤️</div>
+        <h3 class="fs-2">Success Stories</h3>
+        <p>Showcases happy adoption stories to inspire potential adopters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial Carousel -->
+<section id="testimonial" class="bg-body-tertiary py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Happy Tails 🐾</h2>
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner text-center">
+        <div class="carousel-item active">
+          <h3 class="mb-3">"I no longer shiver on cold nights. Sara adopted me!"</h3>
+          <p>– Jumbo, Delhi</p>
+        </div>
+        <div class="carousel-item">
+          <h3 class="mb-3">"My life changed when I found Max. He's my best bud now."</h3>
+          <p>– Priya, Bangalore</p>
+        </div>
+        <div class="carousel-item">
+          <h3 class="mb-3">"Milo helps me smile every single day. Thank you aDOGt!"</h3>
+          <p>– Arjun, Mumbai</p>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Quiz Section -->
+<section id="quiz" class="container my-5">
+  <h2 class="mb-4">Match Me With a Dog 🐶</h2>
+  <form id="quizForm">
+    <div class="mb-3">
+      <label class="form-label">What's your activity level?</label>
+      <select class="form-select" name="activity">
+        <option value="high">Very Active</option>
+        <option value="medium">Moderately Active</option>
+        <option value="low">Homebody</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Do you have kids?</label>
+      <select class="form-select" name="kids">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+    <div class="mb-3">
+  <label class="form-label">Preferred dog size?</label>
+  <select class="form-select" name="size">
+    <option value="small">Small</option>
+    <option value="medium">Medium</option>
+    <option value="large">Large</option>
+  </select>
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Do you already have pets?</label>
+  <select class="form-select" name="otherPets">
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select>
+</div>
+    <button type="submit" class="btn btn-primary">Find My Match</button>
+  </form>
+  <div id="quizResult" class="mt-3 fw-bold"></div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="container mt-5">
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal">Pricing</h1>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center d-flex justify-content-center">
+      <div class="col-md-4 mb-4">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3">
+            <h4 class="my-0 fw-normal">Free</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">0 INR<small class="text-muted">/mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Email support</li>
+              <li>Help center access</li>
+            </ul>
+            <form action="#" method="post">
+              <input type="email" class="form-control mb-2" placeholder="Your email" required>
+              <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3">
+            <h4 class="my-0 fw-normal">Premium</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">50 INR<small class="text-muted">/mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Priority support</li>
+              <li>Access to advanced features</li>
+            </ul>
+            <form action="#" method="post">
+              <input type="email" class="form-control mb-2" placeholder="Your email" required>
+              <button type="submit" class="w-100 btn btn-lg btn-primary">Sign up for premium</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="container my-5" id="donation">
+  <h2 class="mb-4">❤️ Donate to Support Our Dogs</h2>
+  <form id="donationForm">
+    <div class="mb-3">
+      <input type="text" class="form-control" id="donorName" placeholder="Your Name" required />
+    </div>
+    <div class="mb-3">
+      <input type="email" class="form-control" id="donorEmail" placeholder="Your Email" required />
+    </div>
+    <div class="mb-3">
+      <input type="number" class="form-control" id="donationAmount" placeholder="Amount (INR)" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Donate</button>
+  </form>
+  <div id="donationMessage" class="mt-3 text-success fw-bold"></div>
+</section>
+<script>
+  document.getElementById('donationForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name = document.getElementById('donorName').value;
+    const email = document.getElementById('donorEmail').value;
+    const amount = document.getElementById('donationAmount').value;
+
+    document.getElementById('donationMessage').textContent =
+      `🎉 Thank you, ${name}! We've received your ₹${amount} donation. A confirmation will be sent to ${email}.`;
+  });
+</script>
+<!-- Footer -->
+<footer class="py-5 bg-light">
+  <div class="container">
+    <p class="mb-0 text-center text-muted">© 2025 aDOGt, All rights reserved</p>
+  </div>
+</footer>
+
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const breedSelect = document.getElementById('breedSelect');
+  const dogCards = document.querySelectorAll('.dog-card');
+  const noResults = document.getElementById('noResults');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+  let currentVisible = 3;
+  function updateVisibleDogs() {
+    let found = false;
+    dogCards.forEach((card, index) => {
+      const breed = card.dataset.breed.toLowerCase();
+      const selectedBreed = breedSelect.value.toLowerCase();
+      if ((index < currentVisible) && (!selectedBreed || breed === selectedBreed)) {
+        card.classList.add('visible');
+        card.style.display = 'block';
+        found = true;
+      } else {
+        card.classList.remove('visible');
+        card.style.display = 'none';
+      }
+    });
+    noResults.style.display = found ? 'none' : 'block';
+  }
+
+  breedSelect.addEventListener('change', () => {
+    currentVisible = dogCards.length;
+    updateVisibleDogs();
+  });
+
+  loadMoreBtn.addEventListener('click', () => {
+    currentVisible += 3;
+    updateVisibleDogs();
+    if (currentVisible >= dogCards.length) {
+      loadMoreBtn.style.display = 'none';
+    }
+  });
+
+  updateVisibleDogs();
+
+  const quizForm = document.getElementById('quizForm');
+  const quizResult = document.getElementById('quizResult');
+  quizForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const activity = quizForm.activity.value;
+    const kids = quizForm.kids.value;
+
+    let result = "Try a Golden Retriever!";
+    if (activity === "high" && kids === "no") result = "Try a Beagle!";
+    else if (activity === "medium" && kids === "yes") result = "Try a Labrador!";
+    else if (activity === "low") result = "Try an older Golden Retriever or Pug!";
+
+    quizResult.textContent = `🎉 Your match: ${result}`;
+  });
+</script>
+
+</body>
+</html>
